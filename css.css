@@ -1,6 +1,3 @@
-
-
-
 /* =========================================================
    RESET
    ========================================================= */
@@ -9,205 +6,178 @@
     box-sizing: border-box;
 }
 
-
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: auto !important;     /* Прибираємо будь-які vh нафіг */
-    min-height: auto !important;
-    background: #121212;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-}
-
-.video-section {
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Оце і є той самий чорний блок, яким тепер можна керувати! */
-.my-box {
-    width: 800px;    /* Можеш ставити ту ширину в пікселях, яку хочеш (наприклад, 600px, 900px) */
-    max-width: 50%;
-    height: 250px;   /* Жорстко фіксуємо висоту чорного блоку в пікселях! Ніяких відсотків */
-    background: #801818;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.main-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Відео заповнить цей блок рівно так, як ти скажеш */
-}
-
-/* =========================================================
-   VIDEO SECTION
-   Усі елементи всередині стають В КОЛОНКУ (один під одним).
-   Новий елемент просто додається нижче й нічого не зсуває.
-   ========================================================= */
-
-.video-section {
-    width: 100%;
-    min-height: auto;
-    height: auto;
-    padding: 30px 20px; /* невеликі відступи зверху і знизу */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: #1e1e1e;
 }
 
 
 /* =========================================================
-   VIDEO CONTAINER
-   Ширина — на весь екран (до 1800px), висота рахується
-   сама за пропорцією 16:9, але не вища за екран.
+   ГОЛОВНИЙ БЛОК
+   Завжди на весь екран. Розмір НЕ залежить від того,
+   що лежить усередині: відео й кнопку можна рухати й
+   міняти, блок лишається незмінним.
    ========================================================= */
 
-.video-container {
-    width: 100%;
-    max-width: 1800px;
-
-    aspect-ratio: 16 / 9;
-    max-height: calc(100vh - 140px);   /* щоб відео + кнопка влізали в екран */
-
+.dark-block {
     position: relative;
-    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;              /* точна висота екрана на телефоні */
+    min-height: 500px;
 
-    background: #000000;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    background-color: #1e1e1e;
+    color: #ffffff;
 }
 
-.main-video {
-    display: block;
-    width: 100%;
-    height: 100%;
 
-    /* cover — заповнює без смуг, contain — показує весь кадр */
+/* =========================================================
+   ВІДЕО
+   Керуєте тільки цими 4 змінними:
+
+   --video-w   ширина відео  (у % від блоку або в px)
+   --video-h   висота відео
+   --video-x   зсув: мінус = вліво,  плюс = вправо
+   --video-y   зсув: мінус = вгору,  плюс = вниз
+   ========================================================= */
+
+.bg-video {
+    --video-w: 96%;
+    --video-h: 80%;
+    --video-x: 0px;
+    --video-y: -40px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    width: var(--video-w);
+    height: var(--video-h);
+
+    transform: translate(
+        calc(-50% + var(--video-x)),
+        calc(-50% + var(--video-y))
+    );
+
+    /* cover  = заповнює без смуг (може трохи обрізати)
+       contain = показує весь кадр (можуть бути смуги) */
     object-fit: cover;
 
-    background: #000000;
+    z-index: 1;
 }
 
 
 /* =========================================================
-   BUTTON CONTAINER
+   ШАР З КНОПКОЮ
+   Лежить поверх відео на весь блок, але сам кліки не ловить.
    ========================================================= */
 
-.btn-container {
-    width: 100%;
+.block-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
 
     display: flex;
-    justify-content: center;   /* flex-start = вліво, flex-end = вправо */
-    align-items: center;
+    justify-content: center;
+    align-items: flex-end;       /* кнопка внизу; center = по центру */
 
-    margin-top: 30px;
-    margin-bottom: 30px;
+    padding: 0 24px 60px;        /* 60px = відступ кнопки від низу */
+
+    pointer-events: none;
 }
 
 
 /* =========================================================
-   CUSTOM BUTTON
+   КНОПКА
+   Керуєте двома змінними:
 
-   Для підсунути кнопку вручну змінюйте тільки ці дві
-   змінні (мінус = вліво / вгору, плюс = вправо / вниз):
+   --btn-x   мінус = вліво,  плюс = вправо
+   --btn-y   мінус = вгору,  плюс = вниз
    ========================================================= */
 
-.custom-btn {
+.btn-cta {
     --btn-x: 0px;
-    --btn-y: 0px;
+    --btn-y: 20px;
+
+    pointer-events: auto;
 
     display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
 
     background-color: #000000;
     color: #ffffff;
+    border: 2px solid #5ce1e6;
 
     font-family: Arial, sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
-    letter-spacing: 1px;
-    text-decoration: none;
-    text-align: center;
+    cursor: pointer;
 
-    /* Ширина кнопки плавно росте/стискається разом з екраном */
-    padding: 14px clamp(32px, 8vw, 132px);
-
-    border: 2px solid #00e5ff;
-    border-radius: 4px;
+    /* Ширина росте разом з екраном: від 40px до 120px з боків */
+    padding: 14px clamp(40px, 8vw, 120px);
 
     transform: translate(var(--btn-x), var(--btn-y));
 
-    transition: background-color 0.3s ease,
-                color 0.3s ease,
-                box-shadow 0.3s ease;
+    transition: background-color 0.2s ease,
+                box-shadow 0.2s ease,
+                text-shadow 0.2s ease,
+                transform 0.2s ease;
 }
 
-.custom-btn:hover {
-    background-color: #00e5ff;
-    color: #000000;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+.btn-cta:hover {
+    background-color: #0b8ba4;
+    box-shadow: 0 0 25px #5ce1e6;
+    text-shadow: 0 0 8px #5ce1e6;
+}
+
+.btn-cta:active {
+    transform: translate(var(--btn-x), var(--btn-y)) scale(0.96);
+    box-shadow: 0 0 15px #5ce1e6;
 }
 
 
 /* =========================================================
-   TABLET
+   ПЛАНШЕТ
    ========================================================= */
 
 @media (max-width: 1024px) {
 
-    .video-section {
-        padding: 32px 24px 0;
+    .block-content {
+        padding-bottom: 48px;
     }
 
 }
 
 
 /* =========================================================
-   MOBILE
+   ТЕЛЕФОН
+   Тут можна окремо задати розмір і позицію відео та кнопки.
    ========================================================= */
 
 @media (max-width: 768px) {
 
-    .video-section {
-        padding: 24px 16px 0;
+    .bg-video {
+        --video-w: 86%;
+        --video-h: 78%;
+        --video-x: 0px;
+        --video-y: -40px;
     }
 
-    .video-container {
-        border-radius: 0;
-        max-height: none;       /* на телефоні просто 16:9 */
+    .block-content {
+        padding: 0 16px 40px;
     }
 
-    .btn-container {
-        margin-top: 24px;
-        margin-bottom: 24px;
-    }
-
-    .custom-btn {
-        width: 100%;            /* кнопка на всю ширину */
+    .btn-cta {
+        width: 100%;
+        max-width: 420px;
         padding: 14px 20px;
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 480px) {
-
-    .video-section {
-        padding: 16px 10px 0;
-    }
-
-    .custom-btn {
-        font-size: 15px;
+        font-size: 16px;
     }
 
 }
