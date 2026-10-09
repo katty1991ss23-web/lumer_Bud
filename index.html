@@ -6,8 +6,9 @@
 
     <title>Video Block</title>
 
-    <link rel="stylesheet" href="css.css">
+   <link rel="stylesheet" href="css.css">
 </head>
+
 
 <body>
 
@@ -18,20 +19,12 @@
     <section class="video-section">
 
         <div class="video-container">
+    <video class="main-video" autoplay muted loop playsinline preload="metadata">
+        <source src="host/1.mp4" type="video/mp4">
+    </video>
+</div>
 
-            <video
-                class="main-video"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-            >
-                <source src="host/1.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
 
-</div> <!-- закриваємо video-container -->
 
     <div class="btn-container">
         <a href="https://lumirbud.com.ua/" target="_blank" class="custom-btn">Перейти на сайт</a>
